@@ -1,0 +1,41 @@
+import random
+import time
+
+def binomial_transformada_inversa(n, p):
+    U = random.random()  # Generar una variable aleatoria uniforme entre 0 y 1
+    cumulative_prob = 0
+    k = 0
+    while cumulative_prob <= U:
+        cumulative_prob += (1 - p) ** k * p ** (n - k) * (factorial(n) / (factorial(k) * factorial(n - k)))
+        k += 1
+    return k - 1
+
+def binomial_simulacion(n, p):
+    successes = sum(1 for _ in range(n) if random.random() < p)  # Simulando n ensayos y contando los éxitos
+    return successes
+
+def factorial(n):
+    if n == 0:
+        return 1
+    else:
+        return n * factorial(n - 1)
+
+# Parámetros
+n = 10
+p = 0.3
+num_simulaciones = 10000
+
+# Tiempo para transformada inversa
+start_time = time.time()
+resultados_transformada_inversa = [binomial_transformada_inversa(n, p) for _ in range(num_simulaciones)]
+tiempo_transformada_inversa = time.time() - start_time
+
+# Tiempo para simulación
+start_time = time.time()
+resultados_simulacion = [binomial_simulacion(n, p) for _ in range(num_simulaciones)]
+tiempo_simulacion = time.time() - start_time
+
+print("Tiempo necesario para realizar 10000 simulaciones:")
+print("Usando transformada inversa:", tiempo_transformada_inversa, "segundos")
+print("Usando simulación:", tiempo_simulacion, "segundos")
+
